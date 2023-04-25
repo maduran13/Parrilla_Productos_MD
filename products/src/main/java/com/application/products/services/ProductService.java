@@ -33,9 +33,8 @@ public class ProductService {
                 nuevo.add(idProducts.get(i));
             } else if (hasBackSoonNoSpecial || hasNoSpecial) {
                 nuevo.add(idProducts.get(i));
-            } else {
-                i ++;
             }
+            i++;
         }
         return nuevo;
     }
