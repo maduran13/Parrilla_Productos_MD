@@ -4,6 +4,7 @@ import com.application.products.models.Product;
 import com.application.products.repository.ProductsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ public class ProductService {
 
     public List<Integer> getProductsList(){
         List<Integer> idProducts = productsRepository.getProductsIds();
+        List<Integer> nuevo = new ArrayList<>();
         int i = 0;
         while (i < idProducts.size()) {
             Optional<Product> productWithSpecialSizes = productsRepository.getProductWithSpecialSizes(idProducts.get(i));
@@ -27,14 +29,14 @@ public class ProductService {
             boolean hasBackSoonSpecial = productWithBackSoonSpecial.isPresent();
             boolean hasNoSpecial = productWithoutSpecialSizes.isPresent();
             boolean hasBackSoonNoSpecial = productWithBackSoonNoSpecial.isPresent();
-            if (hasSpecialSizes || hasBackSoonSpecial) {
-                break;
-            } else if (!hasBackSoonNoSpecial && hasNoSpecial) {
-                i++;
+            if ((hasSpecialSizes || hasBackSoonSpecial)&&(hasNoSpecial||hasBackSoonNoSpecial)) {
+                nuevo.add(idProducts.get(i));
+            } else if (hasBackSoonNoSpecial || hasNoSpecial) {
+                nuevo.add(idProducts.get(i));
             } else {
-                idProducts.remove(i);
+                i ++;
             }
         }
-        return idProducts;
+        return nuevo;
     }
 }
